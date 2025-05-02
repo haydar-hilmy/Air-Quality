@@ -5,10 +5,11 @@ dotenv.config();
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: "air-quality-squad.firebaseapp.com",
-  projectId: "air-quality-squad",
-  storageBucket: "air-quality-squad.firebasestorage.app",
-  messagingSenderId: process.env.SENDERID,
+  authDomain: process.env.FIREBASE_AUTHDOMAIN,
+  databaseURL: process.env.FIREBASE_DBBASEURL,
+  projectId: process.env.FIREBASE_PROJECTID,
+  storageBucket: process.env.FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.FIREBASE_SENDERID,
   appId: process.env.FIREBASE_APPID
 };
 

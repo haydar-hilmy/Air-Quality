@@ -8,12 +8,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Init Routes
-import homeRouter from './routes/home.js';
-import apiRouter from './routes/apiRouter.js';
-import testRouter from './routes/testRouter.js';
+import homeRouter from './router/homeRouter.js';
+import apiRouter from './router/apiRouter.js';
+import testRouter from './router/testRouter.js';
 
 // Init Middleware
-import logRequest from './middleware/log.js';
+import logRequest from './middleware/logMiddleware.js';
 
 // Init Express App
 const app = express();
