@@ -20,7 +20,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000'  // frontend kamu
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000'
 }));
 app.use(logRequest)
 
@@ -57,7 +57,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error/error');
+  res.render('error/error', { title: "Error" });
 });
 
 export default app;
