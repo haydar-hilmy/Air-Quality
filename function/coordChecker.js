@@ -1,9 +1,4 @@
-const messageReturner = (validity, message) => {
-    return {
-        isValid: validity,
-        message: message
-    }
-}
+import { messageReturner } from "./messageReturner.js";
 
 const isCoord = (latitude, longitude) => {
   const lat = parseFloat(latitude);

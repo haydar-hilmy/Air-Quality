@@ -1,23 +1,41 @@
-import { onValue, push, ref } from "firebase/database";
+import { get, onValue, push, ref } from "firebase/database";
 import { dbFirebase } from "../model/firebase.js";
 import { getDistanceFromLatLonInKm } from "../model/haversine.js";
-import { getAllLocation } from "../model/locationModel.js";
+import { getAllLocation, saveLocation } from "../model/locationModel.js";
 import { isCoord } from "../function/coordChecker.js";
+import { getAllAirQuality, saveAirQuality } from "../model/airQualityModel.js";
 
 const PostLocation = async (req, res, next) => {
   const latitude = req.body.location?.latitude;
   const longitude = req.body.location?.longitude;
 
+  const getTimestamp = new Date().toISOString();
+
   try {
     const checkIsCoord = isCoord(latitude, longitude);
-    if(checkIsCoord.isValid){
-      console.log(checkIsCoord.message)
-    } else {
-      console.log(checkIsCoord.message)
-    }
-    
+    const getAllData = await getAllLocation();
+
+    let data = {
+      locationKey: {
+        latitude: latitude,
+        longitude: longitude,
+      },
+      apiData: "",
+      timestamp: getTimestamp
+    };
+
+    // {
+    //   "locationKey": "lat,lng",
+    //   "aqiData": { ... },
+    //   "timestamp": "2025-04-30T10:00:00Z"
+    // }
+
+    res.status(200).json({
+      data: await saveAirQuality(data),
+      sending: data
+    });
   } catch (error) {
-    
+    console.log("Error: ", error);
   }
 
   //   // MAIN
@@ -57,24 +75,6 @@ const PostLocation = async (req, res, next) => {
 
   //   // Mengirimkan data sebagai JSON
   //   res.status(200).json(data);
-
-  // const locationRef = ref(dbFirebase, "location");
-
-  // try {
-  //   const newLocationRef = push(locationRef, {
-  //     latitude: latitude,
-  //     longitude: longitude,
-  //   });
-  //   res.status(200).json({
-  //     message: "Data saved to Firebase successfully",
-  //     id: newLocationRef.key,
-  //   });
-  // } catch (error) {
-  //   console.error(error);
-  //   res
-  //     .status(500)
-  //     .json({ message: "Failed to save data", error: error.message });
-  // }
 
   // try {
   //   res.status(200).json({data: await getAllLocation()})
