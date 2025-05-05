@@ -18,11 +18,14 @@ const PostLocation = async (req, res, next) => {
   const result = [],
     fetchPromises = [];
 
+  let isSource = undefined;
+
   const pushAirQualityFetch = (locationKey) => {
-    console.log("PUSHAIRQUALITYFETCH")
+    console.log("fetching air quality | source: api");
     fetchPromises.push(
       fetchAirQuality(locationKey).then((data) => {
-        result.push({ source: 'api', data });
+        isSource = 'api'
+        result.push(data);
       })
     );
   };
@@ -32,6 +35,9 @@ const PostLocation = async (req, res, next) => {
     if (checkIsCoord.isValid == false) {
       throw new Error(checkIsCoord.message);
     }
+
+    let closestItem = null;
+    let minDistance = Infinity;
 
     if (getAllData && Object.keys(getAllData).length > 0) {
       for (const key in getAllData) {
@@ -44,32 +50,32 @@ const PostLocation = async (req, res, next) => {
             item.locationKey.longitude
           );
 
-          // 12 km and 45 minute
-          if (getDistance <= 12) {
-            if (diffMinute(item.timestamp) < 45) {
-              console.log("waktu kurang dari 45")
-              console.log("CACHING")
-              // CACHING
-              result.push({
-                source: 'cache',
-                item,
-              });
-            } else {
-              console.log("waktu lebih dari 45")
-              // FETCH API AIR QUALITY
-              pushAirQualityFetch(item.locationKey)
-            }
-          } else {
-            console.log("distance lebih dari 12")
-            // FETCH API AIR QUALITY
-            pushAirQualityFetch(item.locationKey);
+          if (getDistance <= 12 && getDistance < minDistance) {
+            closestItem = item; // getting closest radius
+            minDistance = getDistance;
           }
         }
       }
+
+      if (closestItem) {
+        if (diffMinute(closestItem.timestamp) < 45) {
+          console.log("Waktu kurang dari 45");
+          console.log("Cache");
+          isSource = 'cache';
+          result.push(closestItem.aq);
+        } else {
+          console.log("Waktu lebih dari 45");
+          pushAirQualityFetch(closestItem.locationKey);
+        }
+      } else {
+        console.log("Tidak ada data dalam radius 12km");
+        pushAirQualityFetch({ latitude, longitude });
+      }
       await Promise.all(fetchPromises);
     } else {
-      console.log("Tidak ada collection air-quality")
-      pushAirQualityFetch({ latitude, longitude })
+      console.log("Tidak ada collection air-quality");
+      pushAirQualityFetch({ latitude, longitude });
+      console.log("Menambahkan data baru");
       await Promise.all(fetchPromises);
     }
 
@@ -78,14 +84,18 @@ const PostLocation = async (req, res, next) => {
         latitude: latitude,
         longitude: longitude,
       },
-      apiData: result,
+      source: isSource,
+      aq: result[0],
       timestamp: getTimestamp,
     };
 
     res.status(200).json({
-      saved: await saveAirQuality(data),
+      saved: await saveAirQuality({
+        locationKey: data.locationKey,
+        aq: data.aq[0],
+      }),
       // data: getAllData,
-      data
+      data,
     });
   } catch (error) {
     console.error("Error: ", error);
