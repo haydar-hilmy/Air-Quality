@@ -25,7 +25,6 @@ const getAllAirQuality = async () => {
 // save to firebase
 const saveAirQuality = async (dataAQ) => {
   const dataRef = ref(dbFirebase, COLLECTION);
-
   try {
     const newDataRef = push(dataRef, dataAQ);
     return {
@@ -34,7 +33,7 @@ const saveAirQuality = async (dataAQ) => {
     };
   } catch (error) {
     console.error(error);
-    return { message: "Failed to save data AQ", error: error.message };
+    return { message: "Failed to save AQ data", error: error.message };
   }
 };
 

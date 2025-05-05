@@ -92,7 +92,8 @@ const PostLocation = async (req, res, next) => {
     res.status(200).json({
       saved: await saveAirQuality({
         locationKey: data.locationKey,
-        aq: data.aq[0],
+        aq: data.aq,
+        timestamp: getTimestamp
       }),
       // data: getAllData,
       data,
