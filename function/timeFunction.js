@@ -10,4 +10,20 @@ const diffMinute = (getOldTime) => {
   return diffInMs / (1000 * 60);
 };
 
-export { diffMinute }
+function toIsoWithOffset(date) {
+  const tzOffset = -date.getTimezoneOffset();
+  const diff = tzOffset >= 0 ? '+' : '-';
+  const pad = n => `${Math.floor(Math.abs(n))}`.padStart(2, '0');
+
+  return date.getFullYear() +
+    '-' + pad(date.getMonth() + 1) +
+    '-' + pad(date.getDate()) +
+    'T' + pad(date.getHours()) +
+    ':' + pad(date.getMinutes()) +
+    ':' + pad(date.getSeconds()) +
+    diff + pad(tzOffset / 60) +
+    ':00';
+}
+
+
+export { diffMinute, toIsoWithOffset }
