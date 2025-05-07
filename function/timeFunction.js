@@ -12,18 +12,59 @@ const diffMinute = (getOldTime) => {
 
 function toIsoWithOffset(date) {
   const tzOffset = -date.getTimezoneOffset();
-  const diff = tzOffset >= 0 ? '+' : '-';
-  const pad = n => `${Math.floor(Math.abs(n))}`.padStart(2, '0');
+  const diff = tzOffset >= 0 ? "+" : "-";
+  const pad = (n) => `${Math.floor(Math.abs(n))}`.padStart(2, "0");
 
-  return date.getFullYear() +
-    '-' + pad(date.getMonth() + 1) +
-    '-' + pad(date.getDate()) +
-    'T' + pad(date.getHours()) +
-    ':' + pad(date.getMinutes()) +
-    ':' + pad(date.getSeconds()) +
-    diff + pad(tzOffset / 60) +
-    ':00';
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes()) +
+    ":" +
+    pad(date.getSeconds()) +
+    diff +
+    pad(tzOffset / 60) +
+    ":00"
+  );
 }
 
+function toIsoWithOffsetRoundedToHour(date) {
+  date.setMinutes(0, 0, 0); // Buang menit, detik, dan ms
+  const tzOffset = -date.getTimezoneOffset();
+  const diff = tzOffset >= 0 ? "+" : "-";
+  const pad = (n) => `${Math.floor(Math.abs(n))}`.padStart(2, "0");
 
-export { diffMinute, toIsoWithOffset }
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes()) +
+    ":" +
+    pad(date.getSeconds()) +
+    diff +
+    pad(tzOffset / 60) +
+    ":00"
+  );
+}
+
+function toUtcRoundedIso(date) {
+  date.setUTCMinutes(0, 0, 0);
+  return date.toISOString().replace(/\.\d{3}Z$/, "Z"); // hapus milidetik
+}
+
+export {
+  diffMinute,
+  toIsoWithOffset,
+  toIsoWithOffsetRoundedToHour,
+  toUtcRoundedIso,
+};

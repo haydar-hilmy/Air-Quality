@@ -11,6 +11,7 @@ dotenv.config();
 import homeRouter from './router/homeRouter.js';
 import apiRouter from './router/apiRouter.js';
 import testRouter from './router/testRouter.js';
+import geminiRouter from './router/geminiRouter.js';
 
 // Init Middleware
 import logRequest from './middleware/logMiddleware.js';
@@ -43,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRouter);
 app.use('/test/', testRouter);
 app.use('/api/v1/', apiRouter);
+app.use('/gemini/', geminiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
