@@ -39,9 +39,6 @@ router.post("/fc", async (req, res, next) => {
     new Date(tomorrow.getTime() + 3 * 24 * 60 * 60 * 1000)
   );
 
-  console.log("startTime: ", startTime);
-  console.log("endTime: ", endTime);
-
   try {
     const days = 7;
     const pageSize = days * 24;

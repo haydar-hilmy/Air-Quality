@@ -1,11 +1,82 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to <%= title %></h1>
+
+    <section>
+      <h2>Endpoint</h2>
+      <p><strong>POST</strong> <code>/api/v1/</code></p>
+    </section>
+
+    <section>
+      <h2>Request Body</h2>
+      <pre><code>{
+  "location": {
+    "latitude": "-6.176092968261875",
+    "longitude": "106.83162290218792"
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>Response</h2>
+      <pre><code>{
+  "saved": {
+    "message": "Data Air Quality saved to Firebase successfully",
+    "id": "-OPykwSw2Jv0WKVWzAOd"
+  },
+  "data": {
+    "locationKey": {
+      "latitude": "-6.176092968261875",
+      "longitude": "106.83162290218792"
+    },
+    "source": "cache",
+    "aq": {
+      "dateTime": "2025-05-11T09:00:00Z",
+      "healthRecommendations": {
+        "athletes": "...",
+        "children": "...",
+        ...
+      },
+      "indexes": [
+        {
+          "aqi": 63,
+          "category": "Good air quality",
+          "code": "uaqi",
+          "dominantPollutant": "pm10"
+        },
+        {
+          "aqi": 83,
+          "category": "Moderate air quality",
+          "code": "idn_menlhk",
+          "dominantPollutant": "pm25"
+        }
+      ],
+      "pollutants": [
+        {
+          "code": "pm10",
+          "value": 41.02,
+          "units": "µg/m³"
+        },
+        {
+          "code": "pm25",
+          "value": 21.36,
+          "units": "µg/m³"
+        }
+      ],
+      "regionCode": "id"
+    },
+    "timestamp": "2025-05-11T09:53:41.447Z"
+  }
+}</code></pre>
+    </section>
+  </div>
+</body>
 </html>
